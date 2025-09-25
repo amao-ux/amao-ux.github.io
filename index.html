@@ -103,7 +103,7 @@
                 // Define the configuration for the local model
                 var detectorConfig = {
                     modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER,
-                    modelUrl: './model.json' // The key change is here!
+                    modelUrl: './model/model.json' // The key change is here!
                 };
 
                 poseDetection.createDetector(poseDetection.SupportedModels.MoveNet, detectorConfig)
