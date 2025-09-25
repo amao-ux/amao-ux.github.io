@@ -95,15 +95,14 @@
     <script>
         var videoElement=document.getElementById("webcam"),poseImageGuide=document.getElementById("pose-image-guide"),instructionBoard=document.getElementById("instruction-board"),instructionText=document.getElementById("instruction-text"),startButton=document.getElementById("start-button"),startTitle=document.getElementById("start-title"),startScreen=document.getElementById("start-screen"),countdownScreen=document.getElementById("countdown-screen"),transitionScreen=document.getElementById("transition-screen"),transitionTimer=document.getElementById("transition-timer"),endScreen=document.getElementById("end-screen"),restartButton=document.getElementById("restart-button"),progressContainer=document.getElementById("progress-container"),progressBar=document.getElementById("progress-bar"),detector,gameLoopId,gameState="waiting",gameStage=0,STAGE_NAMES=["Squat","High Lunge","Side Bend","Hands Behind Head","Forward Punch"],POSE_IMAGE_URLS=["img/squat.png","img/high_lunge.png","img/side_bend.png","img/hands_behind_head.png","img/forward_punch.png"],poseHoldCounter=0,POSE_HOLD_FRAMES=30;function setupCamera(){return new Promise(function(e,t){navigator.mediaDevices&&navigator.mediaDevices.getUserMedia?navigator.mediaDevices.getUserMedia({video:{width:640,height:480},audio:!1}).then(function(t){videoElement.srcObject=t,videoElement.onloadedmetadata=function(){e(!0)}}).catch(function(e){t(new Error("Camera permission denied."))}):t(new Error("Browser does not support camera."))})}
         
-        // --- UPDATED: This function now loads the model from a local path ---
+        // --- UPDATED: This function now loads the model from the ONLINE CDN ---
         function loadPoseDetector(){
             return new Promise(function(e,t){
                 if(!window.poseDetection) return t(new Error("AI Library failed to load."));
                 
-                // Define the configuration for the local model
+                // Define the configuration for the ONLINE model, removing 'modelUrl'
                 var detectorConfig = {
-                    modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER,
-                    modelUrl: './model/model.json' // The key change is here!
+                    modelType: poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING
                 };
 
                 poseDetection.createDetector(poseDetection.SupportedModels.MoveNet, detectorConfig)
@@ -112,8 +111,8 @@
                         e(true);
                     })
                     .catch(function(error){
-                        console.error("Local AI Model failed to load:", error);
-                        t(new Error("AI Model incompatible or not found."));
+                        console.error("Online AI Model failed to load:", error);
+                        t(new Error("AI Model incompatible or network error."));
                     });
             });
         }
